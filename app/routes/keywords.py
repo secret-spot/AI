@@ -1,9 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 import re
+
+router = APIRouter()
 
 # 환경 변수 로드
 load_dotenv()
@@ -32,14 +34,11 @@ model = genai.GenerativeModel(
     """
 )
 
-# FastAPI 앱
-app = FastAPI(title="Gemini Keyword")
-
 # 요청 모델
 class ChatRequest(BaseModel):
     prompt: str
 
-@app.post("/keyword/")
+@router.post("/keyword/")
 async def keyword(request: ChatRequest):
     try:
         user_prompt = request.prompt
