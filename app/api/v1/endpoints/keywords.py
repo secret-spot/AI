@@ -38,7 +38,7 @@ model = genai.GenerativeModel(
 class ChatRequest(BaseModel):
     prompt: str
 
-@router.post("/keyword/")
+@router.post("/")
 async def keyword(request: ChatRequest):
     try:
         user_prompt = request.prompt
