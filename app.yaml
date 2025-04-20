@@ -1,9 +1,9 @@
 runtime: python312
 
-entrypoint: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+entrypoint: uvicorn app.main:app --host 0.0.0.0 --port $PORT 
 
 env_variables:
-  GOOGLE_API_KEY: "projects/secret-spot-456800/secrets/GOOGLE_API_KEY/versions/latest" 
+  GOOGLE_API_KEY: "GOOGLE_API_KEY" 
 
 instance_class: F2  # 필요 시 B1, F1 등으로 조절 가능
 
