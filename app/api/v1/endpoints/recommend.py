@@ -1,15 +1,17 @@
+import os
+from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
 from app.config import get_secret
 import re
-import os
-from dotenv import load_dotenv
 
 router = APIRouter()
+
 # 환경 변수 로드
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
 # GOOGLE_API_KEY = get_secret()
 
 if not GOOGLE_API_KEY:
@@ -24,12 +26,16 @@ model = genai.GenerativeModel(
     system_instruction="""
     너는 여행 가이드야. 해당 검색어 주변 소도시를 추천하면서 소도시를 소개하는는 한줄평을 남겨줘:
 
-    - 소도시 : 검색어 주변에 있는 사람들이 많이 가지 않는 소도시 한 곳을 추천해줘.
+    - 소도시 : 검색어 주변에 있는 사람들이 많이 가지 않는 소도시 세 곳을 추천해줘.
     - 한줄평 : 소도시를 소개하는 한줄평을 작성해줘.
 
     예시 형식:
-    소도시: 구리
-    한줄평: 한강을 따라 펼쳐진 자연과 도심이 조화를 이루는 매력적인 소도시
+    소도시1: 구리
+    한줄평1: 한강을 따라 펼쳐진 자연과 도심이 조화를 이루는 매력적인 소도시
+    소도시2: 아산
+    한줄평2: 온천과 자연이 어우러진 조용한 휴식처
+    소도시3: 남양주
+    한줄평3: 산과 강이 함께하는 힐링 도시
     """
 )
 
@@ -58,27 +64,25 @@ async def recommend(request: ChatRequest):
 
         # 파싱 로직
         def parse_output(text: str):
-            smallcity_match = re.search(r"소도시[:：]\s*(.+)", text)
-            shortreview_match = re.search(r"한줄평[:：]\s*(.+)", text, re.DOTALL)
+            # 소도시와 한줄평을 3개씩 추출
+            smallcities = re.findall(r"소도시[:：]\s*(.+)", text)
+            shortreviews = re.findall(r"한줄평[:：]\s*(.+)", text)
 
-            # 에티켓
-            smallcity_text = ""
-            if smallcity_match:
-                smallcity_text = smallcity_match.group(1).strip()
-            
-            # 한줄평
-            shortreview_text = ""
-            if shortreview_match:
-                shortreview_text = shortreview_match.group(1).strip()
+            # 결과 리스트로 구성
+            result = []
+            for i in range(3):
+                smallCity = smallcities[i].strip() if i < len(smallcities) else ""
+                shortReview = shortreviews[i].strip() if i < len(shortreviews) else ""
+                result.append({
+                    "smallCity": smallCity,
+                    "shortReview": shortReview
+                })
 
-            return {
-                "smallCity": smallcity_text,
-                "content": shortreview_text
-            }
+            return result
 
         result = parse_output(generated_text)
 
-        return result
+        return {"recommendations": result}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")

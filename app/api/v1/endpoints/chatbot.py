@@ -1,16 +1,17 @@
+import os
+from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
 from app.config import get_secret
 import re
-import os
-from dotenv import load_dotenv
 
 router = APIRouter()
 
 # 환경 변수 로드
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
 # GOOGLE_API_KEY = get_secret()
 
 if not GOOGLE_API_KEY:
@@ -45,13 +46,20 @@ async def chatbot(request: ChatRequest):
             )
         )
 
-        # 응답 처리
-        if response.candidates and response.candidates[0].content.parts:
-            generated_text = ''.join([part.text for part in response.candidates[0].content.parts])
-        else:
-            raise HTTPException(status_code=500, detail="유효한 응답 내용을 찾을 수 없습니다.")
+        if not response.candidates or not response.candidates[0].content.parts:
+            raise HTTPException(status_code=500, detail="모델 응답이 없습니다.")
 
-        return {"reply": generated_text.strip()}
+        generated_text = ''.join([part.text for part in response.candidates[0].content.parts])
+
+        # 파싱 로직
+        def parse_output(text: str):
+            return {
+                "content": text.strip()
+            }
+
+        result = parse_output(generated_text)
+
+        return result
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")
