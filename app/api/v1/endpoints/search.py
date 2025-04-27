@@ -37,21 +37,14 @@ def is_location(query):
     else:
         return False  # 결과 없음
 
-# 요청 모델
-class ChatRequest(BaseModel):
-    prompt: str
-
-@router.post("/")
-async def search(request: ChatRequest):
+@router.get("/")
+async def search(prompt: str):
     try:
-        user_prompt = request.prompt
-        print(user_prompt)
-        
-        isRegion=is_location(user_prompt)
+        isRegion=is_location(prompt)
         print(isRegion)
 
         return {
-            "region": user_prompt,
+            "region": prompt,
             "isRegion": isRegion
         }
 

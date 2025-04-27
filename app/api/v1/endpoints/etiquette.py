@@ -39,18 +39,12 @@ model = genai.GenerativeModel(
     """
 )
 
-# 요청 모델
-class ChatRequest(BaseModel):
-    prompt: str
-
-@router.post("/")
-async def etiquette(request: ChatRequest):
+@router.get("/")
+async def etiquette(prompt: str):
     try:
-        user_prompt = request.prompt
-
         # 모델 응답
         response = model.generate_content(
-            user_prompt,
+            prompt,
             generation_config=genai.types.GenerationConfig(
                 candidate_count=1,
                 temperature=0.7
@@ -72,7 +66,7 @@ async def etiquette(request: ChatRequest):
                 etiquette_text = etiquette_match.group(1).strip()
 
             return {
-                "region": user_prompt,
+                "region": prompt,
                 "content": etiquette_text
             }
 

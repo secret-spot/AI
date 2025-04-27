@@ -39,18 +39,12 @@ model = genai.GenerativeModel(
     """
 )
 
-# 요청 모델
-class ChatRequest(BaseModel):
-    prompt: str
-
-@router.post("/")
-async def recommend(request: ChatRequest):
+@router.get("/")
+async def recommend(prompt: str):
     try:
-        user_prompt = request.prompt
-
         # 모델 응답
         response = model.generate_content(
-            user_prompt,
+            prompt,
             generation_config=genai.types.GenerationConfig(
                 candidate_count=1,
                 temperature=0.7
@@ -91,7 +85,10 @@ async def recommend(request: ChatRequest):
 
         result = parse_output(generated_text)
 
-        return {"recommendations": result}
+        return {
+            "region":prompt,
+            "recommendations": result
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")
