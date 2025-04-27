@@ -1,35 +1,41 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-import google.generativeai as genai
+# import google.generativeai as genai
 from app.config import get_secret
-import re
+# import re
 import os
 from dotenv import load_dotenv
+import requests
 
 router = APIRouter()
 # 환경 변수 로드
 load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GOOGLE_PLACES_API = os.getenv("GOOGLE_PLACES_API")
 # GOOGLE_API_KEY = get_secret()
 
-if not GOOGLE_API_KEY:
+if not GOOGLE_PLACES_API:
     raise Exception("API 키를 불러올 수 없습니다.")
 
-# Google Generative AI 구성
-genai.configure(api_key=GOOGLE_API_KEY)
+# Google Geocoding API URL
+geocode_url = "https://maps.googleapis.com/maps/api/geocode/json"
 
-# 모델 초기화
-model = genai.GenerativeModel(
-    'gemini-2.0-flash',
-    system_instruction="""
-    너는 검색어를 입력받아 지역인지 아닌지 구분해해줘:
-
-    - 지역: 지역명인지 아닌지지
-
-    예시 형식:
-    지역: true 
-    """
-)
+def is_location(query):
+    # API 요청 파라미터
+    params = {
+        'address': query,  # 사용자가 입력한 검색어
+        'key': GOOGLE_PLACES_API    # API 키
+    }
+    
+    # 요청 보내기
+    response = requests.get(geocode_url, params=params)
+    print(response.url)
+    data = response.json()
+    
+    # 검색 결과가 있으면 지역명으로 판단
+    if 'results' in data and len(data['results']) > 0:
+        return True  # 지역명
+    else:
+        return False  # 결과 없음
 
 # 요청 모델
 class ChatRequest(BaseModel):
@@ -39,38 +45,15 @@ class ChatRequest(BaseModel):
 async def search(request: ChatRequest):
     try:
         user_prompt = request.prompt
+        print(user_prompt)
+        
+        isRegion=is_location(user_prompt)
+        print(isRegion)
 
-        # 모델 응답
-        response = model.generate_content(
-            user_prompt,
-            generation_config=genai.types.GenerationConfig(
-                candidate_count=1,
-                temperature=0.7
-            )
-        )
-
-        if not response.candidates or not response.candidates[0].content.parts:
-            raise HTTPException(status_code=500, detail="모델 응답이 없습니다.")
-
-        generated_text = ''.join([part.text for part in response.candidates[0].content.parts])
-
-        # 파싱 로직
-        def parse_output(text: str):
-            search_match = re.search(r"지역[:：]\s*(true|false)", text, re.IGNORECASE)
-
-            # 지역 여부 
-            is_region = search_match.group(1).strip().lower() == "true" if search_match else False
-
-
-
-            return {
-                "region": user_prompt,
-                "isRegion": is_region
-            }
-
-        result = parse_output(generated_text)
-
-        return result
+        return {
+            "region": user_prompt,
+            "isRegion": isRegion
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")
