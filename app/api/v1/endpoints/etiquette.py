@@ -22,12 +22,18 @@ genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel(
     'gemini-2.0-flash',
     system_instruction="""
-    너는 검색어를 입력받아 지역인지 아닌지 구분해해줘:
+    너는 지역명을 입력받아 해당 지역에 맞는 에티켓 문구를 출력해줘:
 
-    - 지역: 지역명인지 아닌지지
+    - 에티켓 : 지역명이면 해당 지역에 맞는 에티켓 내용 간단하게 요약해서 출력해줘 (대중교통, 공공장소 이런식으로 구분 안해줘도 돼.)
 
     예시 형식:
-    지역: true 
+    에티켓: 교토 여행 에티켓 요약
+    사찰·신사에서는 조용히 하고, 사진 촬영 금지 구역을 확인해요.
+    왼쪽 통행을 지키고, 길에서 현지인에게 방해되지 않게 해요.
+    쓰레기는 직접 챙겨서 버려요.
+    가게에서는 트레이에 돈을 놓고 계산해요.
+    게이샤(마이코)에게 다가가거나 무단 촬영하지 않기.
+    자전거는 인도에서 끌고 걷기가 기본이에요.
     """
 )
 
@@ -36,7 +42,7 @@ class ChatRequest(BaseModel):
     prompt: str
 
 @router.post("/")
-async def search(request: ChatRequest):
+async def etiquette(request: ChatRequest):
     try:
         user_prompt = request.prompt
 
@@ -56,16 +62,16 @@ async def search(request: ChatRequest):
 
         # 파싱 로직
         def parse_output(text: str):
-            search_match = re.search(r"지역[:：]\s*(true|false)", text, re.IGNORECASE)
+            etiquette_match = re.search(r"에티켓[:：]\s*(.+)", text, re.DOTALL)
 
-            # 지역 여부 
-            is_region = search_match.group(1).strip().lower() == "true" if search_match else False
-
-
+            # 에티켓
+            etiquette_text = ""
+            if etiquette_match:
+                etiquette_text = etiquette_match.group(1).strip()
 
             return {
                 "region": user_prompt,
-                "isRegion": is_region
+                "content": etiquette_text
             }
 
         result = parse_output(generated_text)

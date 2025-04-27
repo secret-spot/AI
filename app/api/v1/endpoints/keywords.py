@@ -3,15 +3,15 @@ from pydantic import BaseModel
 import google.generativeai as genai
 from app.config import get_secret
 import re
-# import os
-# from dotenv import load_dotenv
+import os
+from dotenv import load_dotenv
 
 router = APIRouter()
 
 # 환경 변수 로드
-# load_dotenv()
-# GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-GOOGLE_API_KEY = get_secret()
+load_dotenv()
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+# GOOGLE_API_KEY = get_secret()
 
 if not GOOGLE_API_KEY:
     raise Exception("API 키를 불러올 수 없습니다.")
