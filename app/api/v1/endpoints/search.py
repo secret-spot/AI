@@ -2,7 +2,7 @@
 # from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from app.config import get_secret
+from app.config import get_geocodingAPI
 import requests
 
 router = APIRouter()
@@ -11,7 +11,7 @@ router = APIRouter()
 # load_dotenv()
 # GOOGLE_PLACES_API = os.getenv("GOOGLE_PLACES_API")
 
-GOOGLE_PLACES_API = get_secret()
+GOOGLE_PLACES_API = get_geocodingAPI()
 
 if not GOOGLE_PLACES_API:
     raise Exception("API 키를 불러올 수 없습니다.")

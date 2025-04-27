@@ -3,7 +3,8 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
-from app.config import get_secret
+from app.config import get_geminiAPI
+
 import re
 
 router = APIRouter()
@@ -12,7 +13,7 @@ router = APIRouter()
 # load_dotenv()
 # GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-GOOGLE_API_KEY = get_secret()
+GOOGLE_API_KEY = get_geminiAPI()
 
 if not GOOGLE_API_KEY:
     raise Exception("API 키를 불러올 수 없습니다.")
