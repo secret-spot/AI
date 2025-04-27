@@ -1,15 +1,16 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
-import os
 from app.config import get_secret
-# from dotenv import load_dotenv
 import re
+# import os
+# from dotenv import load_dotenv
 
 router = APIRouter()
 
 # 환경 변수 로드
 # load_dotenv()
+# GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 GOOGLE_API_KEY = get_secret()
 
 if not GOOGLE_API_KEY:
