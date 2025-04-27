@@ -1,5 +1,5 @@
-import os
-from dotenv import load_dotenv
+# import os
+# from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from app.config import get_secret
@@ -8,10 +8,10 @@ import requests
 router = APIRouter()
 
 # 환경 변수 로드
-load_dotenv()
-GOOGLE_PLACES_API = os.getenv("GOOGLE_PLACES_API")
+# load_dotenv()
+# GOOGLE_PLACES_API = os.getenv("GOOGLE_PLACES_API")
 
-# GOOGLE_PLACES_API = get_secret()
+GOOGLE_PLACES_API = get_secret()
 
 if not GOOGLE_PLACES_API:
     raise Exception("API 키를 불러올 수 없습니다.")

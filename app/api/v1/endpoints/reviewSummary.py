@@ -1,5 +1,5 @@
-import os
-from dotenv import load_dotenv
+# import os
+# from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
@@ -9,10 +9,10 @@ import re
 router = APIRouter()
 
 # 환경 변수 로드
-load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+# load_dotenv()
+# GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-# GOOGLE_API_KEY = get_secret()
+GOOGLE_API_KEY = get_secret()
 
 if not GOOGLE_API_KEY:
     raise Exception("API 키를 불러올 수 없습니다.")
@@ -44,7 +44,7 @@ async def reviewSummary(request: ChatRequest):
     try:
         user_prompt = request.prompt
 
-        # 모델 응답
+        # 모델 응답 
         response = model.generate_content(
             user_prompt,
             generation_config=genai.types.GenerationConfig(

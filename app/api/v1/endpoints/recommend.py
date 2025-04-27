@@ -1,5 +1,5 @@
-import os
-from dotenv import load_dotenv
+# import os
+# from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
@@ -9,10 +9,10 @@ import re
 router = APIRouter()
 
 # 환경 변수 로드
-load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+# load_dotenv()
+# GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-# GOOGLE_API_KEY = get_secret()
+GOOGLE_API_KEY = get_secret()
 
 if not GOOGLE_API_KEY:
     raise Exception("API 키를 불러올 수 없습니다.")
@@ -62,17 +62,26 @@ async def recommend(request: ChatRequest):
 
         generated_text = ''.join([part.text for part in response.candidates[0].content.parts])
 
+        print(generated_text)
+
         # 파싱 로직
         def parse_output(text: str):
             # 소도시와 한줄평을 3개씩 추출
-            smallcities = re.findall(r"소도시[:：]\s*(.+)", text)
-            shortreviews = re.findall(r"한줄평[:：]\s*(.+)", text)
+            smallcities = []
+            shortreviews = []
+            for i in range(3):
+                smallcities.append(re.search(fr"소도시{i+1}[:：]\s*(.+)", text))
+                shortreviews.append(re.search(fr"한줄평{i+1}[:：]\s*(.+)", text))
+
+            # 추출된 텍스트를 바로 리스트에 넣기 전에, 매칭된 결과가 있는지 체크
+            smallcities_text = [match.group(1).strip() if match else "" for match in smallcities]
+            shortreviews_text = [match.group(1).strip() if match else "" for match in shortreviews]
 
             # 결과 리스트로 구성
             result = []
             for i in range(3):
-                smallCity = smallcities[i].strip() if i < len(smallcities) else ""
-                shortReview = shortreviews[i].strip() if i < len(shortreviews) else ""
+                smallCity = smallcities_text[i]
+                shortReview = shortreviews_text[i]
                 result.append({
                     "smallCity": smallCity,
                     "shortReview": shortReview
