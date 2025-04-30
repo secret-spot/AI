@@ -25,6 +25,7 @@ model = genai.GenerativeModel(
     'gemini-2.0-flash',
     system_instruction="""
     너는 여행을 도와주는 친구야. 질문을 받으면 친구처럼 친절하게 대답해줘. 만약에 여행지 추천을 받는다면 사람들이 많이 몰리지 않는 소도시 중심으로 추천해줘.
+    그리고 답변은 150자 이내로 해줘.
     """
 )
 
