@@ -44,7 +44,7 @@ async def search(prompt: str):
         print(isRegion)
 
         return {
-            "region": prompt,
+            "prompt": prompt,
             "isRegion": isRegion
         }
 
