@@ -18,7 +18,7 @@ if not GOOGLE_PLACES_API:
 # Google Geocoding API URL
 geocode_url = "https://maps.googleapis.com/maps/api/geocode/json"
 
-async def is_location(query):
+async def classify_location(query):
     params = {
         'address': query,
         'key': GOOGLE_PLACES_API
@@ -28,20 +28,45 @@ async def is_location(query):
         response = await client.get(geocode_url, params=params)
         data = response.json()
 
-    if 'results' in data and len(data['results']) > 0:
-        return True
-    else:
-        return False
+    if 'results' not in data or not data['results']:
+        return {
+            "isRegion": False,
+            "isPlace": False
+        }
+    
+    result = data['results'][0]
+    types = result.get("types", [])
+
+    # 행정 구역
+    region_keywords = {
+        "administrative_area_level_1",  # 도/광역시
+        "administrative_area_level_2",  # 시/군/구
+        "locality",                     # 도시
+        "sublocality",                 # 동/읍/면
+        "country"
+    }
+
+    # 장소(POI)
+    place_keywords = {
+        "point_of_interest", "establishment", "premise", "park", "museum"
+    }
+
+    isRegion = any(t in types for t in region_keywords)
+    isPlace = any(t in types for t in place_keywords)
+
+    return {
+        "isRegion": isRegion,
+        "isPlace": isPlace
+    }
     
 @router.get("/")
 async def search(prompt: str):
     try:
-        isRegion = await is_location(prompt)  
-        print(isRegion)
+        result = await classify_location(prompt)  
 
         return {
             "prompt": prompt,
-            "isRegion": isRegion
+            "result": result
         }
 
     except Exception as e:
