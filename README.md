@@ -1,11 +1,10 @@
 # ❤️‍🔥 S2 (Secret-Spot)
----
 ![S2 Logo](https://github.com/secret-spot/AI/blob/main/S2.jpg)
+
 **Info**
 S2 is a service designed to solve the increasingly discussed problem of overtourism. Instead of crowded tourist attractions, it helps users introduce and explore their own secret places so that they can find less crowded places.
 
 ## 👨‍👩‍👧‍👦Members
----
 ### Developer
 |FE&Designer|BE|BE|AI|
 |:--:|:--:|:--:|:--:|
@@ -24,7 +23,7 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 + ####
 ---
 ## 📌Key Features
-
+---
 ## 📂Project Folder
 ```
 │── app
