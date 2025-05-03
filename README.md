@@ -8,7 +8,7 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 ### Developer
 |FE&Designer|BE|BE|AI|
 |:--:|:--:|:--:|:--:|
-|![jieun](https://avatars.githubusercontent.com/u/143923436?v=4)|![haneul](https://avatars.githubusercontent.com/u/145983374?v=4)|![gyeongeun](https://avatars.githubusercontent.com/u/167386241?v=4)|![eojin](https://github.com/account)|
+|![jieun](https://avatars.githubusercontent.com/u/143923436?v=4)|![haneul](https://avatars.githubusercontent.com/u/145983374?v=4)|![gyeongeun](https://avatars.githubusercontent.com/u/167386241?v=4)|![eojin](https://avatars.githubusercontent.com/u/166782787?v=4)|
 |GDG on Sookmyung|GDG on Sookmyung|GDG on Sookmyung|GDG on Sookmyung|
 |JiEun Lee|Haneul Lee|Gyeongeun Lee|Eojin Yang|
 
