@@ -63,7 +63,7 @@ async def get_less_crowded_places(lat: float, lng: float):
             "rating": place.get("rating"),
             "reviews": place.get("user_ratings_total")
         }
-        for place in sorted_places[:5]
+        for place in sorted_places[:3]
     ]
 
     return recommendations
