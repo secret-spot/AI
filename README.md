@@ -3,6 +3,7 @@
 
 ### Info
 
+
 S2 is a service designed to solve the increasingly discussed problem of overtourism. Instead of crowded tourist attractions, it helps users introduce and explore their own secret places so that they can find less crowded places.
 
 ## 👨‍👩‍👧‍👦Members
