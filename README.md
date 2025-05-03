@@ -19,7 +19,6 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 ![python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white)
 <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=green"/>
 <img src="https://img.shields.io/badge/GoogleGemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=purple"/>
-<img src="https://img.shields.io/badge/GoogleGemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=purple"/>
 ![gcloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
 
 + **Language:** python
@@ -29,21 +28,21 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 ---
 ## 📌Key Features
 ---
-## 📂Project Folder
+## 📂Folder
 ```
 │── app
 │   ├── api/v1
-│       ├── endpoints/      # 비즈니스 로직
-│       └── routers.py      # API 라우팅
-│   ├── config.py           # 인증 및 기타 미들웨어
-│   └── main.pu             # Express 설정
-│── .env                    # 환경 변수 파일
-│── requirements.txt        # 프로젝트 의존성 및 설정
-│── app.yaml                # 프로젝트 의존성 및 설정
+│       ├── endpoints/      # Modules that handle actual business logic
+│       └── routers.py      # File that registers each endpoint to the FastAPI router
+│   ├── config.py           # Configuration file for the API and Gemini API settings
+│   └── main.py             # Entry point of the FastAPI application (server startup file)
+│── .env                    # File that defines environment variables
+│── requirements.txt        # File listing required packages and libraries
+│── app.yaml                # Deployment configuration file for Google App Engine
 ```
 ## 🌐Deployment & Demo 
-+ #### 전체 배포 주소:
-+ #### AI 배포 주소:
-+ #### Demo 영상: 
++ #### Full Deployment URL:
++ #### AI Deployment URL:
++ #### Demo Video:
 ---
 ## Try S2 right now! 
