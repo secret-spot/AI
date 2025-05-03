@@ -21,10 +21,10 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 <img src="https://img.shields.io/badge/GoogleGemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=purple"/>
 ![gcloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
 
-+ **Language:** python
-+ **FrameWork:** FastAPI
-+ **Deployment Platform:** Google App Engine
-+ **AI:** Google gemini
+  + **Language:** python
+  + **FrameWork:** FastAPI
+  + **Deployment Platform:** Google App Engine
+  + **AI:** Google gemini
 ---
 ## 📌Key Features
 ---
@@ -41,8 +41,8 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 │── app.yaml                # Deployment configuration file for Google App Engine
 ```
 ## 🌐Deployment & Demo 
-+ #### Full Deployment URL:
-+ #### AI Deployment URL:
-+ #### Demo Video:
++ **Full Deployment URL:**
++ **AI Deployment URL:**(https://secret-spot-456800.du.r.appspot.com)
++ **Demo Video:**
 ---
 ## Try S2 right now! 
