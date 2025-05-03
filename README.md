@@ -27,26 +27,26 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
   + **AI:** Google gemini
 ---
 ## 📌Key Features
-1️⃣ Keyword Extraction Feature 📍
+### 1️⃣ Keyword Extraction Feature 📍
 + **Description:** Automatically extracts relevant keywords from the user's post.
 + **Key Categories:**
   + **Companion Type:** Solo, Family, Friends, Couple
   + **Travel Style:** Art, Extreme, Photography, Food, Healing, History, Shopping, Experience
   + **Region:** Any mentioned region
 
-2️⃣ Local Etiquette Display Feature 😊
+### 2️⃣ Local Etiquette Display Feature 😊
 + **Description:** When a user searches for a specific region, the system provides local etiquette guidelines tailored to that area.
 + **Highlights:**
   + Utilizes Gemini to generate region-specific etiquette suggestions.
   + Future updates may involve building a dedicated etiquette dataset per region for even more accurate and localized results.
 
-3️⃣ Small City Recommendation Feature 🗺️
+### 3️⃣ Small City Recommendation Feature 🗺️
 + **Description:** Recommends lesser-known small cities near the user’s selected location to help avoid overcrowded destinations.
 + **Highlights:**
   + Powered by Gemini to identify nearby under-the-radar cities.
   + Can be enhanced in the future to base recommendations on accumulated user-generated posts and data.
 
-4️⃣ Chatbot Feature 🤖
+### 4️⃣ Chatbot Feature 🤖
 + **Description:** An AI-powered companion that assists users like a real travel buddy.
 + **Highlights:**
   + Provides friendly and personalized travel support, just like a friend on the journey.
