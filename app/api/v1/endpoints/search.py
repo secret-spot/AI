@@ -1,9 +1,8 @@
 # import os
 # from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 from app.config import get_geocodingAPI
-import requests
+import httpx
 
 router = APIRouter()
 
@@ -19,28 +18,26 @@ if not GOOGLE_PLACES_API:
 # Google Geocoding API URL
 geocode_url = "https://maps.googleapis.com/maps/api/geocode/json"
 
-def is_location(query):
-    # API 요청 파라미터
+async def is_location(query):
     params = {
-        'address': query,  # 사용자가 입력한 검색어
-        'key': GOOGLE_PLACES_API    # API 키
+        'address': query,
+        'key': GOOGLE_PLACES_API
     }
     
-    # 요청 보내기
-    response = requests.get(geocode_url, params=params)
-    print(response.url)
-    data = response.json()
-    
-    # 검색 결과가 있으면 지역명으로 판단
-    if 'results' in data and len(data['results']) > 0:
-        return True  # 지역명
-    else:
-        return False  # 결과 없음
+    async with httpx.AsyncClient() as client:
+        response = await client.get(geocode_url, params=params)
+        print(response.url)
+        data = response.json()
 
+    if 'results' in data and len(data['results']) > 0:
+        return True
+    else:
+        return False
+    
 @router.get("/")
 async def search(prompt: str):
     try:
-        isRegion=is_location(prompt)
+        isRegion = await is_location(prompt)  
         print(isRegion)
 
         return {
