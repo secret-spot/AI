@@ -1,5 +1,5 @@
-# import os
-# from dotenv import load_dotenv
+import os
+from dotenv import load_dotenv
 from google.auth import default
 from google.cloud import secretmanager
 import google.generativeai as genai
@@ -28,10 +28,10 @@ def get_geocodingAPI():
         raise Exception(f"비밀 키를 가져오는 데 실패했습니다: {str(e)}")
 
 # 환경 변수 로드
-# load_dotenv()
-# GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+load_dotenv()
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
  
-GOOGLE_API_KEY = get_geminiAPI()
+# GOOGLE_API_KEY = get_geminiAPI()
 
 if not GOOGLE_API_KEY:
     raise Exception("API 키를 불러올 수 없습니다.")
