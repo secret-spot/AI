@@ -26,7 +26,6 @@ async def is_location(query):
     
     async with httpx.AsyncClient() as client:
         response = await client.get(geocode_url, params=params)
-        print(response.url)
         data = response.json()
 
     if 'results' in data and len(data['results']) > 0:
