@@ -17,6 +17,9 @@ def call_gemini_sync(prompt: str) -> str:
 @router.get("/")
 async def recommend(prompt: str):
     try:
+        if not prompt or not prompt.strip():
+            raise HTTPException(status_code=400, detail="입력된 prompt가 없거나 비어 있습니다. 다시 입력해 주세요.")
+        
         generated_text = await anyio.to_thread.run_sync(call_gemini_sync, prompt)
 
         # 소도시와 한줄평을 3개씩 추출

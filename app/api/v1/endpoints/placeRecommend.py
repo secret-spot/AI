@@ -18,9 +18,13 @@ if not GOOGLE_PLACES_API:
 GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
 
-# 입력한 지역 → 위도, 경도 변환
-async def get_coordinates(location: str):
-    params = {"address": location, "key": GOOGLE_PLACES_API}
+async def get_coordinates(place_name: str):
+    params = {
+        "address": place_name,
+        "key": GOOGLE_PLACES_API,
+        "language": "ko"  # 한국어로 검색 결과 반환
+    }
+
     async with httpx.AsyncClient() as client:
         response = await client.get(GEOCODE_URL, params=params)
         data = response.json()
@@ -29,7 +33,7 @@ async def get_coordinates(location: str):
         loc = data["results"][0]["geometry"]["location"]
         return loc["lat"], loc["lng"]
     else:
-        raise Exception("위치를 찾을 수 없습니다.")
+        raise Exception("해당 장소의 위치를 찾을 수 없습니다.")
 
 # 주변 장소(POI) 검색 후 평점/리뷰 수 적은 순 정렬
 async def get_less_crowded_places(lat: float, lng: float):
@@ -49,9 +53,15 @@ async def get_less_crowded_places(lat: float, lng: float):
     print("API 상태:", data.get("status"))
     print("Google Places API 응답 수:", len(results))
 
+    # 리뷰 수가 1 이상인 장소만 필터링
+    filtered_results = [
+        place for place in results
+        if place.get("user_ratings_total", 0) > 0
+    ]
+
     # 평점과 리뷰 수 기준으로 적게 알려진 장소 정렬
     sorted_places = sorted(
-        results,
+        filtered_results,
         key=lambda x: (x.get("user_ratings_total", 0), -x.get("rating", 0))
     )
 
@@ -71,6 +81,9 @@ async def get_less_crowded_places(lat: float, lng: float):
 @router.get("/")
 async def recommend_quiet_places(prompt: str):
     try:
+        if not prompt or not prompt.strip():
+            raise HTTPException(status_code=400, detail="입력된 prompt가 없거나 비어 있습니다. 다시 입력해 주세요.")
+        
         lat, lng = await get_coordinates(prompt)
         places = await get_less_crowded_places(lat, lng)
 

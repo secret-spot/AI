@@ -62,6 +62,9 @@ async def classify_location(query):
 @router.get("/")
 async def search(prompt: str):
     try:
+        if not prompt or not prompt.strip():
+            raise HTTPException(status_code=400, detail="입력된 prompt가 없거나 비어 있습니다. 다시 입력해 주세요.")
+        
         result = await classify_location(prompt)  
 
         return {
