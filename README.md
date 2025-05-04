@@ -70,4 +70,4 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 + **Demo Video:**
 ---
 ## Try S2 right now! 
-#### [👇click S2](https://secret-spot-22469.web.app/)
+### [👇S2](https://secret-spot-22469.web.app/)
