@@ -1,7 +1,7 @@
 import anyio
 from fastapi import APIRouter, HTTPException
-import google.generativeai as genai
 from app.config import models
+from pydantic import BaseModel
 import re
 
 router = APIRouter()
@@ -14,19 +14,22 @@ def call_gemini_sync(prompt: str) -> str:
         raise Exception("모델 응답 없음")
     return ''.join([part.text for part in response.candidates[0].content.parts])
 
-@router.get("/")
-async def etiquette(prompt: str):
+# 요청 모델
+class ChatRequest(BaseModel):
+    prompt: str
+
+@router.post("/")
+async def etiquette(request: ChatRequest):
     try:
-        if not prompt or not prompt.strip():
-            raise HTTPException(status_code=400, detail="입력된 prompt가 없거나 비어 있습니다. 다시 입력해 주세요.")
+        body = request.prompt
         
-        generated_text = await anyio.to_thread.run_sync(call_gemini_sync, prompt)
+        generated_text = await anyio.to_thread.run_sync(call_gemini_sync, body)
 
         etiquette_match = re.search(r"에티켓[:：]\s*(.+)", generated_text, re.DOTALL)
         etiquette_text = etiquette_match.group(1).strip() if etiquette_match else ""
 
         return {
-            "region": prompt,
+            "region": body,
             "content": etiquette_text
         }
 

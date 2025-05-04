@@ -3,6 +3,7 @@
 import httpx
 from fastapi import APIRouter, HTTPException
 from app.config import get_geocodingAPI  
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -78,17 +79,20 @@ async def get_less_crowded_places(lat: float, lng: float):
 
     return recommendations
 
-@router.get("/")
-async def recommend_quiet_places(prompt: str):
+# 요청 모델
+class ChatRequest(BaseModel):
+    prompt: str
+
+@router.post("/")
+async def recommend_quiet_places(request: ChatRequest):
     try:
-        if not prompt or not prompt.strip():
-            raise HTTPException(status_code=400, detail="입력된 prompt가 없거나 비어 있습니다. 다시 입력해 주세요.")
+        body = request.prompt
         
-        lat, lng = await get_coordinates(prompt)
+        lat, lng = await get_coordinates(body)
         places = await get_less_crowded_places(lat, lng)
 
         return {
-            "region": prompt,
+            "region": body,
             "recommendations": places
         }
 

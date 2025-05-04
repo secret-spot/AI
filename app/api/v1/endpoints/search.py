@@ -3,6 +3,7 @@
 from fastapi import APIRouter, HTTPException
 from app.config import get_geocodingAPI
 import httpx
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -58,17 +59,20 @@ async def classify_location(query):
         "isRegion": isRegion,
         "isPlace": isPlace
     }
+
+# 요청 모델
+class ChatRequest(BaseModel):
+    prompt: str
     
-@router.get("/")
-async def search(prompt: str):
+@router.post("/")
+async def search(request: ChatRequest):
     try:
-        if not prompt or not prompt.strip():
-            raise HTTPException(status_code=400, detail="입력된 prompt가 없거나 비어 있습니다. 다시 입력해 주세요.")
+        body = request.prompt
         
-        result = await classify_location(prompt)  
+        result = await classify_location(body)  
 
         return {
-            "prompt": prompt,
+            "prompt": body,
             "result": result
         }
 
