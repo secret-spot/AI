@@ -42,7 +42,8 @@ async def get_less_crowded_places(lat: float, lng: float):
         "location": f"{lat},{lng}",
         "radius": 5000,  # 반경 10km
         "type": "tourist_attraction",  # 관광지, 필요 시 restaurant 등 변경 가능
-        "key": GOOGLE_PLACES_API
+        "key": GOOGLE_PLACES_API,
+        "language": "ko"
     }
 
     async with httpx.AsyncClient() as client:
@@ -50,9 +51,6 @@ async def get_less_crowded_places(lat: float, lng: float):
         data = response.json()
 
     results = data.get("results", [])
-    print("검색 위치:", lat, lng)
-    print("API 상태:", data.get("status"))
-    print("Google Places API 응답 수:", len(results))
 
     # 리뷰 수가 1 이상인 장소만 필터링
     filtered_results = [

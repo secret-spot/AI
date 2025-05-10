@@ -7,9 +7,8 @@ import google.generativeai as genai
 
 def get_geminiAPI():
     credentials, _ = default()
-    # Secret Manager 클라이언트 생성
     client = secretmanager.SecretManagerServiceClient(credentials=credentials)
-    secret_name = "projects/736744382613/secrets/GOOGLE_API_KEY/versions/latest"
+    secret_name = "projects/1036716270240/secrets/GOOGLE_API_KEY/versions/latest"
     try:
         response = client.access_secret_version(name=secret_name)
         return response.payload.data.decode("UTF-8")
@@ -18,9 +17,8 @@ def get_geminiAPI():
 
 def get_geocodingAPI():
     credentials, _ = default()
-    # Secret Manager 클라이언트 생성
     client = secretmanager.SecretManagerServiceClient(credentials=credentials)
-    secret_name = "projects/736744382613/secrets/GOOGLE_PLACES_API/versions/latest"
+    secret_name = "projects/1036716270240/secrets/GOOGLE_PLACES_API/versions/latest"
     try:
         response = client.access_secret_version(name=secret_name)
         return response.payload.data.decode("UTF-8")
