@@ -65,8 +65,9 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 │── app.yaml                # Deployment configuration file for Google App Engine
 ```
 ## 🌐Deployment & Demo 
-+ **Full Deployment URL:**https://secret-spot-22469.web.app/
++ **Full Deployment URL:** https://secret-spot-22469.web.app/
 + **AI Deployment URL:** https://secret-spot-456800.du.r.appspot.com
 + **Demo Video:**
 ---
 ## Try S2 right now! 
+### 👇[Secret Spot](https://secret-spot-22469.web.app/)
