@@ -11,10 +11,10 @@ def call_gemini_sync(prompt: str) -> str:
     model = models.get(model_name)
     response = model.generate_content(prompt)
     if not response.candidates or not response.candidates[0].content.parts:
-        raise Exception("모델 응답 없음")
+        raise Exception("No Response")
     return ''.join([part.text for part in response.candidates[0].content.parts])
 
-# 요청 모델
+# Request model
 class ChatRequest(BaseModel):
     prompt: str
 
@@ -25,18 +25,18 @@ async def recommend(request: ChatRequest):
         
         generated_text = await anyio.to_thread.run_sync(call_gemini_sync, body)
 
-        # 소도시와 한줄평을 3개씩 추출
+        # Extract 3 small cities and 3 one-line descriptions
         smallcities = []
         shortreviews = []
         for i in range(3):
-            smallcities.append(re.search(fr"소도시{i+1}[:：]\s*(.+)", generated_text))
-            shortreviews.append(re.search(fr"한줄평{i+1}[:：]\s*(.+)", generated_text))
+            smallcities.append(re.search(fr"Small City {i+1}[:：]\s*(.+)", generated_text))
+            shortreviews.append(re.search(fr"One-Line Description {i+1}[:：]\s*(.+)", generated_text))
 
-        # 추출된 텍스트를 바로 리스트에 넣기 전에, 매칭된 결과가 있는지 체크
+        # Before adding extracted text to the list, check if a match exists
         smallcities_text = [match.group(1).strip() if match else "" for match in smallcities]
         shortreviews_text = [match.group(1).strip() if match else "" for match in shortreviews]
 
-        # 결과 리스트로 구성
+        # Construct the result list
         result = []
         for i in range(3):
             smallCity = smallcities_text[i]
@@ -47,9 +47,9 @@ async def recommend(request: ChatRequest):
             })
 
         return {
-            "region":body,
+            "region": body,
             "recommendations": result
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)}")

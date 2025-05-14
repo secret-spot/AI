@@ -7,14 +7,14 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
-# 환경 변수 로드
+# Load environment variables
 # load_dotenv()
 # GOOGLE_PLACES_API = os.getenv("GOOGLE_PLACES_API")
 
 GOOGLE_PLACES_API = get_geocodingAPI()
 
 if not GOOGLE_PLACES_API:
-    raise Exception("API 키를 불러올 수 없습니다.")
+    raise Exception("Failed to load the API key.")
 
 # Google Geocoding API URL
 geocode_url = "https://maps.googleapis.com/maps/api/geocode/json"
@@ -38,16 +38,16 @@ async def classify_location(query):
     result = data['results'][0]
     types = result.get("types", [])
 
-    # 행정 구역
+    # Administrative region
     region_keywords = {
-        "administrative_area_level_1",  # 도/광역시
-        "administrative_area_level_2",  # 시/군/구
-        "locality",                     # 도시
-        "sublocality",                 # 동/읍/면
+        "administrative_area_level_1",  # Province/Metropolitan city
+        "administrative_area_level_2",  # City/County/District
+        "locality",                     # City
+        "sublocality",                  # Town/Village/Neighborhood
         "country"
     }
 
-    # 장소(POI)
+    # Point of interest (POI)
     place_keywords = {
         "point_of_interest", "establishment", "premise", "park", "museum"
     }
@@ -60,7 +60,7 @@ async def classify_location(query):
         "isPlace": isPlace
     }
 
-# 요청 모델
+# Request model
 class ChatRequest(BaseModel):
     prompt: str
     
@@ -77,4 +77,4 @@ async def search(request: ChatRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)}")

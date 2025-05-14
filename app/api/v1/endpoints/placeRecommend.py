@@ -7,14 +7,14 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
-# 환경 변수 로드
+# Load environment variables
 # load_dotenv()
 # GOOGLE_PLACES_API = os.getenv("GOOGLE_PLACES_API")
 
 GOOGLE_PLACES_API = get_geocodingAPI()
 
 if not GOOGLE_PLACES_API:
-    raise Exception("API 키를 불러올 수 없습니다.")
+    raise Exception("Failed to load the API key.")
 
 GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
@@ -23,7 +23,7 @@ async def get_coordinates(place_name: str):
     params = {
         "address": place_name,
         "key": GOOGLE_PLACES_API,
-        "language": "ko"  # 한국어로 검색 결과 반환
+        "language": "ko"  # Return search results in Korean
     }
 
     async with httpx.AsyncClient() as client:
@@ -34,14 +34,14 @@ async def get_coordinates(place_name: str):
         loc = data["results"][0]["geometry"]["location"]
         return loc["lat"], loc["lng"]
     else:
-        raise Exception("해당 장소의 위치를 찾을 수 없습니다.")
+        raise Exception("Could not find the location for the given place.")
 
-# 주변 장소(POI) 검색 후 평점/리뷰 수 적은 순 정렬
+# Search for nearby places (POIs) and sort by lowest ratings/reviews
 async def get_less_crowded_places(lat: float, lng: float):
     params = {
         "location": f"{lat},{lng}",
-        "radius": 5000,  # 반경 10km
-        "type": "tourist_attraction",  # 관광지, 필요 시 restaurant 등 변경 가능
+        "radius": 5000,  # Radius of 5km
+        "type": "tourist_attraction",  # Change to 'restaurant' or others if needed
         "key": GOOGLE_PLACES_API,
         "language": "ko"
     }
@@ -52,19 +52,19 @@ async def get_less_crowded_places(lat: float, lng: float):
 
     results = data.get("results", [])
 
-    # 리뷰 수가 1 이상인 장소만 필터링
+    # Filter only places with at least 1 review
     filtered_results = [
         place for place in results
         if place.get("user_ratings_total", 0) > 0
     ]
 
-    # 평점과 리뷰 수 기준으로 적게 알려진 장소 정렬
+    # Sort by number of reviews (ascending) and rating (descending)
     sorted_places = sorted(
         filtered_results,
         key=lambda x: (x.get("user_ratings_total", 0), -x.get("rating", 0))
     )
 
-    # 상위 5개만 추천
+    # Recommend top 3 places
     recommendations = [
         {
             "name": place.get("name"),
@@ -77,7 +77,7 @@ async def get_less_crowded_places(lat: float, lng: float):
 
     return recommendations
 
-# 요청 모델
+# Request model
 class ChatRequest(BaseModel):
     prompt: str
 

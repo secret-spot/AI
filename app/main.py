@@ -20,7 +20,7 @@ app.add_middleware(
 
 app.include_router(api_router, prefix="/api/v1")
 
-# 기본 엔드포인트
+# Basic endpoint
 @app.get("/")
 def read_root():
     return {"message": "Hello, world!"}

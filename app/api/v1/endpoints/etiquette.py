@@ -11,10 +11,10 @@ def call_gemini_sync(prompt: str) -> str:
     model = models.get(model_name)
     response = model.generate_content(prompt)
     if not response.candidates or not response.candidates[0].content.parts:
-        raise Exception("모델 응답 없음")
+        raise Exception("No Response")
     return ''.join([part.text for part in response.candidates[0].content.parts])
 
-# 요청 모델
+# Request
 class ChatRequest(BaseModel):
     prompt: str
 
@@ -25,7 +25,7 @@ async def etiquette(request: ChatRequest):
         
         generated_text = await anyio.to_thread.run_sync(call_gemini_sync, body)
 
-        etiquette_match = re.search(r"에티켓[:：]\s*(.+)", generated_text, re.DOTALL)
+        etiquette_match = re.search(r"Etiquette[:：]\s*(.+)", generated_text, re.DOTALL)
         etiquette_text = etiquette_match.group(1).strip() if etiquette_match else ""
 
         return {
@@ -34,4 +34,4 @@ async def etiquette(request: ChatRequest):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"서버 오류: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Server Error: {str(e)}")
