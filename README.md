@@ -15,6 +15,8 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 |[Jieun Lee](https://github.com/mariewldms)|[Haneul Lee](https://github.com/tishakong)|[Gyeongeun Lee](https://github.com/ruddmslee)|[Eojin Yang](https://github.com/ydjwls)|
 
 ---
+## 📌Architecture
+
 ## 📌Tech Stack
 ![python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white)
 <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=green"/>
