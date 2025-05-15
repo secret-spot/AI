@@ -16,6 +16,7 @@ S2 is a service designed to solve the increasingly discussed problem of overtour
 
 ---
 ## 📌Architecture
+<img src="https://github.com/secret-spot/AI/blob/c787fa935b7c934a1122bb65b467ee231fbbd5da/Architecture%201.svg"/>
 
 ## 📌Tech Stack
 ![python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white)
