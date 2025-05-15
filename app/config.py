@@ -113,6 +113,7 @@ models = {
             Activity: Which types of activities are relevant to the review? Choose from: art, extreme sports, photography, food, healing, history, shopping, or hands-on experiences
 
             Example format:
+            Nation: Korea
             Location: Gangneung, Sokcho
             Companion: Partner
             Activity: Extreme sports, Healing

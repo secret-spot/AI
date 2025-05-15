@@ -23,7 +23,7 @@ async def get_coordinates(place_name: str):
     params = {
         "address": place_name,
         "key": GOOGLE_PLACES_API,
-        "language": "ko"  # Return search results in Korean
+        "language": "en"
     }
 
     async with httpx.AsyncClient() as client:
@@ -43,7 +43,7 @@ async def get_less_crowded_places(lat: float, lng: float):
         "radius": 5000,  # Radius of 5km
         "type": "tourist_attraction",  # Change to 'restaurant' or others if needed
         "key": GOOGLE_PLACES_API,
-        "language": "ko"
+        "language": "en"
     }
 
     async with httpx.AsyncClient() as client:

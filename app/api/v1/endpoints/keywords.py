@@ -24,6 +24,8 @@ async def keyword(request: ChatRequest):
         generated_text = await anyio.to_thread.run_sync(call_gemini_sync, request.prompt)
 
         def parse_output(text: str):
+            nation_match = re.search(r"Nation[:：]\s*([^\n]+)", text)
+            nation_text = nation_match.group(1).strip() if nation_match else ""
             location_match = re.search(r"Location[:：]\s*([^\n]+)", text)
             companion_match = re.search(r"Companion[:：]\s*([^\n]+)", text)
             activity_match = re.search(r"Activity[:：]\s*([^\n]+)", text)
@@ -32,7 +34,7 @@ async def keyword(request: ChatRequest):
             cities = []
             if location_match:
                 city_list = [c.strip() for c in location_match.group(1).split(",")]
-                cities = [{"key": "Korea", "value": city} for city in city_list]
+                cities = [{"key": nation_text, "value": city} for city in city_list]
 
             # 키워드 파싱
             keywords = []
